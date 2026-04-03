@@ -117,6 +117,19 @@ void loop() {
     printer.printValue(8,motor_driver.printState());
     printer.printValue(9,imu.printRollPitchHeading());        
     printer.printValue(10,imu.printAccels());
+
+    // Print out UV sensor values
+    float uvVoltage = adc.sample[2] * 3.3 / 4095.0;
+
+    float uvGain = 1 + (200/12);
+    float uvIndex = (uvVoltage / uvGain) / 0.1;
+    String uvStr = "UV Voltage: " + String(uvVoltage,4) + "  UV Index:" + String(uvIndex,2);
+    printer.printValue(11, uvStr);
+
+    float tempVoltage = adc.sample[3] * 3.3 / 4095.0;
+    String tempStr = "Thermistor Voltage: " + String(tempVoltage,4);
+    printer.printValue(12, tempStr);
+
     printer.printToSerial();  // To stop printing, just comment this line out
   }
 
