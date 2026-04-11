@@ -76,8 +76,8 @@ void setup() {
 
   int diveDelay = 5000; // how long robot will stay at depth waypoint before continuing (ms)
 
-  const int num_depth_waypoints = 2;
-  double depth_waypoints [] = { 0.5, 1 };  // listed as z0,z1,... etc.
+  const int num_depth_waypoints = 8;
+  double depth_waypoints [] = { 0.5, 1, 1.5, 2, 2.5, 3, 2.5, 4 };  // listed as z0,z1,... etc.
   depth_control.init(num_depth_waypoints, depth_waypoints, diveDelay);
   
   xy_state_estimator.init(); 
@@ -119,14 +119,14 @@ void loop() {
     printer.printValue(10,imu.printAccels());
 
     // Print out UV sensor values
-    float uvVoltage = adc.sample[2] * 3.3 / 4095.0;
+    float uvVoltage = adc.sample[2] * 3.3 / 1024.0;
 
     float uvGain = 1 + (200/12);
     float uvIndex = (uvVoltage / uvGain) / 0.1;
     String uvStr = "UV Voltage: " + String(uvVoltage,4) + "  UV Index:" + String(uvIndex,2);
     printer.printValue(11, uvStr);
 
-    float tempVoltage = adc.sample[3] * 3.3 / 4095.0;
+    float tempVoltage = adc.sample[3] * 3.3 / 1024.0;
     String tempStr = "Thermistor Voltage: " + String(tempVoltage,4);
     printer.printValue(12, tempStr);
 
