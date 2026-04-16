@@ -64,6 +64,7 @@ void setup() {
   logger.include(&ef);
   logger.include(&button_sampler);
   logger.init();
+  delay(1000);
 
   printer.init();
   ef.init();
@@ -76,8 +77,8 @@ void setup() {
 
   int diveDelay = 5000; // how long robot will stay at depth waypoint before continuing (ms)
 
-  const int num_depth_waypoints = 4;
-  double depth_waypoints [] = { 0.5, 1, 1.5, 2 };  // listed as z0,z1,... etc.
+  const int num_depth_waypoints = 6;
+  double depth_waypoints [] = { 0.5, 1, 1.5, 2, 2.5, 3};  // listed as z0,z1,... etc.
   depth_control.init(num_depth_waypoints, depth_waypoints, diveDelay);
   
   xy_state_estimator.init(); 
@@ -103,7 +104,7 @@ void setup() {
 
 void loop() {
   currentTime=millis();
-    
+
   if ( currentTime-printer.lastExecutionTime > LOOP_PERIOD ) {
     printer.lastExecutionTime = currentTime;
     printer.printValue(0,adc.printSample());
@@ -119,18 +120,19 @@ void loop() {
     printer.printValue(10,imu.printAccels());
 
     // Print out UV sensor values
-    float uvVoltage = adc.sample[2] * 3.3 / 4095.0;
+    float uvVoltage = adc.sample[2] * 3.3 / 1024.0;
 
     float uvGain = 1 + (200/12);
     float uvIndex = (uvVoltage / uvGain) / 0.1;
     String uvStr = "UV Voltage: " + String(uvVoltage,4) + "  UV Index:" + String(uvIndex,2);
     printer.printValue(11, uvStr);
 
-    float tempVoltage = adc.sample[3] * 3.3 / 4095.0;
+    float tempVoltage = adc.sample[3] * 3.3 / 1024.0;
     String tempStr = "Thermistor Voltage: " + String(tempVoltage,4);
     printer.printValue(12, tempStr);
 
     printer.printToSerial();  // To stop printing, just comment this line out
+
   }
 
   /* ROBOT CONTROL Finite State Machine */
@@ -145,7 +147,7 @@ void loop() {
         depth_control.diveState = false; 
         depth_control.surfaceState = true;
       }
-      motor_driver.drive(0,0,depth_control.uV);
+      motor_driver.drive(depth_control.uV,0,depth_control.uV);
     }
     if ( depth_control.surfaceState ) {     // SURFACE STATE //
       if ( !depth_control.atSurface ) { 
@@ -154,7 +156,7 @@ void loop() {
       else if ( depth_control.complete ) { 
         delete[] depth_control.wayPoints;   // destroy depth waypoint array from the Heap
       }
-      motor_driver.drive(0,0,depth_control.uV);
+      motor_driver.drive(depth_control.uV,0,depth_control.uV);
     }
   }
   
