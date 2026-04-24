@@ -4,7 +4,7 @@
 clear;
 %clf;
 
-filenum = '027'; % file number for the data you want to read
+filenum = '028'; % file number for the data you want to read
 infofile = strcat('INF', filenum, '.TXT');
 datafile = strcat('LOG', filenum, '.BIN');
 
@@ -68,10 +68,10 @@ temp_V = temp_raw.*3.3/1024;
 %depth = -2.9*pressure_V+8.88;
 
 %temperature calibration: voltage -> temp 
-temp_C = (4.75-temp_V)/0.196;
+temp_C = (-4.58*temp_V) + 23.2;
 
 %UV calibration: voltage -> UV index 
-G = 17 %Edit as needed 
+G = 3.64 %Edit as needed 
 uv_index = 10*(uv_V/G);
 
 %% plots: depth vs voltages 
@@ -133,3 +133,16 @@ hold off;
 
 figure;
 plot(uv_V);
+hold on;
+plot(depth1);
+title("UV TIME AND DEPTH")
+xlim([5000,5951])
+
+figure;
+plot(temp_V);
+
+figure;
+plot(uv_V);
+
+figure;
+plot(temp_C);
