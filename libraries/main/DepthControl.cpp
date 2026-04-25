@@ -34,8 +34,16 @@ void DepthControl::dive(z_state_t * state, int currentTime_in) {
   depth = state->z;
   depth_error = depth_des - depth;
   uV = Kp * depth_error;
-  if (uV > 200) uV = 200;
-  else if (uV < -200) uV = -200;
+  int correctionlim = 200;
+  if (uV > correctionlim) uV = correctionlim;
+  else if (uV < -correctionlim) uV = -correctionlim;
+
+  // tell motors to stop
+  if (delayed) uV = 0;
+
+  // Dead Zone method -- REFERENCE 10 CM DEADZONE
+  //if (fabs(depth_error) < 0.1) uV= 0;
+
   ///////////////////////////////////////////////////////////////////////
   // don't change code past this point
   ///////////////////////////////////////////////////////////////////////
