@@ -428,12 +428,12 @@ hold off
 figure;
 blue = [0 0.7 1];
 green = [0 0.5 0.1];
-plot(depthd_DNm, uv_ind_DNm, 'Color', blue, 'LineWidth', 1);
+plot(depthd_DNm, uv_ind_DNm, 'Color', blue, 'LineWidth', 1.5);
 hold on
-plot(depthd_Dm, uv_ind_Dm, '-.', 'Color', blue, 'LineWidth', 1);
+plot(depthd_Dm, uv_ind_Dm, '-.', 'Color', blue, 'LineWidth', 0.5);
 title('UV vs Depth at Dana Point')
-plot(depthd_PNm, uv_ind_PNm, 'Color', green, 'LineWidth', 1);
-plot(depthd_Pm, uv_ind_Pm, '-.', 'Color', green, 'LineWidth', 1);
+plot(depthd_PNm, uv_ind_PNm, 'Color', green, 'LineWidth', 1.5);
+plot(depthd_Pm, uv_ind_Pm, '-.', 'Color', green, 'LineWidth', 0.5);
 ylabel('UV index')
 xlabel('Depth [m]')
 legend('Dana point without motors', 'Dana point with motors running', 'Phake lake without motors', 'Phake lake with motors running')
@@ -459,11 +459,104 @@ hold off
 
 % combining into a 2d array of [depth lower upper]
 
+% uv dana point
+
 uvlow_DNm = ones(length(depthd_DNm), 2);
 uvup_DNm = ones(length(depthd_DNm), 2);
 
 for n = 1:length(depthd_DNm)
-    uvdepth_DNm(n, 1) = depthd_DNm(n);
-    uvdepth_DNm(n, 2) = lower_uvDNm(n);
-    uvdepth_DNm(n, 3) = upper_uvDNm(n);
+    uvlow_DNm(n, 1) = depthd_DNm(n);
+    uvlow_DNm(n, 2) = lower_uvDNm(n);
+    uvup_DNm(n, 1) = depthd_DNm(n);
+    uvup_DNm(n, 2) = upper_uvDNm(n);
+end
 
+% [~,ia,ic] = unique(uvlow_DNm, 'rows');          % Unique Elements
+% v = accumarray(ic, 1);                  % Tally Occurrences Of Rows
+% uniqueUVlowDNm = uvlow_DNm(ia(v==1),:);                      % Keep Rows That Only Appear Once
+% 
+% [~,ia,ic] = unique(uvup_DNm, 'rows');          % Unique Elements
+% v = accumarray(ic, 1);                  % Tally Occurrences Of Rows
+% uniqueUVupDNm = uvup_DNm(ia(v==1),:);                      % Keep Rows That Only Appear Once
+
+[C, ia] = unique(uvlow_DNm(:, 1));          % Unique Elements
+uniqueUVlowDNm = uvlow_DNm(ia,:);   
+
+[C, ia] = unique(uvup_DNm(:, 1));          % Unique Elements
+uniqueUVupDNm = uvup_DNm(ia,:); 
+
+uvlow_Dm = ones(length(depthd_Dm), 2);
+uvup_Dm = ones(length(depthd_Dm), 2);
+
+for n = 1:length(depthd_Dm)
+    uvlow_Dm(n, 1) = depthd_Dm(n);
+    uvlow_Dm(n, 2) = lower_uvDm(n);
+    uvup_Dm(n, 1) = depthd_Dm(n);
+    uvup_Dm(n, 2) = upper_uvDm(n);
+end
+
+[C, ia] = unique(uvlow_Dm(:, 1));          % Unique Elements
+uniqueUVlowDm = uvlow_Dm(ia,:);   
+
+[C, ia] = unique(uvup_Dm(:, 1));          % Unique Elements
+uniqueUVupDm = uvup_Dm(ia,:); 
+
+figure;
+plot(depthd_DNm, uv_ind_DNm)
+hold on
+shade(uniqueUVlowDNm(:, 1), uniqueUVlowDNm(:, 2), uniqueUVupDNm(:, 1), uniqueUVupDNm(:, 2),'FillType',[1 2;2 1])
+plot(depthd_Dm, uv_ind_Dm)
+shade(uniqueUVlowDm(:, 1), uniqueUVlowDm(:, 2), uniqueUVupDm(:, 1), uniqueUVupDm(:, 2),'FillType',[1 2;2 1])
+title('UV vs Depth at Dana Point')
+ylabel('UV index')
+xlabel('Depth [m]')
+legend('With motors running', 'Without motors')
+grid on
+hold off
+
+% uv phake lake
+
+uvlow_PNm = ones(length(depthd_PNm), 2);
+uvup_PNm = ones(length(depthd_PNm), 2);
+
+for n = 1:length(depthd_PNm)
+    uvlow_PNm(n, 1) = depthd_PNm(n);
+    uvlow_PNm(n, 2) = lower_uvPNm(n);
+    uvup_PNm(n, 1) = depthd_PNm(n);
+    uvup_PNm(n, 2) = upper_uvPNm(n);
+end
+
+[C, ia] = unique(uvlow_PNm(:, 1));          % Unique Elements
+uniqueUVlowPNm = uvlow_PNm(ia,:);   
+
+[C, ia] = unique(uvup_PNm(:, 1));          % Unique Elements
+uniqueUVupPNm = uvup_PNm(ia,:); 
+
+uvlow_Pm = ones(length(depthd_Pm), 2);
+uvup_Dm = ones(length(depthd_Pm), 2);
+
+for n = 1:length(depthd_m)
+    uvlow_Pm(n, 1) = depthd_Dm(n);
+    uvlow_Pm(n, 2) = lower_uvDm(n);
+    uvup_Dm(n, 1) = depthd_Dm(n);
+    uvup_Dm(n, 2) = upper_uvDm(n);
+end
+
+[C, ia] = unique(uvlow_Pm(:, 1));          % Unique Elements
+uniqueUVlowDm = uvlow_Pm(ia,:);   
+
+[C, ia] = unique(uvup_Dm(:, 1));          % Unique Elements
+uniqueUVupDm = uvup_Dm(ia,:); 
+
+figure;
+plot(depthd_DNm, uv_ind_DNm)
+hold on
+shade(uniqueUVlowPNm(:, 1), uniqueUVlowPNm(:, 2), uniqueUVupPNm(:, 1), uniqueUVupPNm(:, 2),'FillType',[1 2;2 1])
+plot(depthd_Dm, uv_ind_Dm)
+shade(uniqueUVlowDm(:, 1), uniqueUVlowDm(:, 2), uniqueUVupDm(:, 1), uniqueUVupDm(:, 2),'FillType',[1 2;2 1])
+title('UV vs Depth at Dana Point')
+ylabel('UV index')
+xlabel('Depth [m]')
+legend('With motors running', 'Without motors')
+grid on
+hold off
