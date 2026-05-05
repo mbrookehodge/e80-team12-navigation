@@ -338,7 +338,7 @@ uv_ind_PNm = uv_index(tdown_PNm);
 %% poster graphs
 
 % error calculations
-% first for UV:
+%% first for UV:
 err_uVoltPm = 0.792089.*((uv_Vd_Pm/GP).^2);
 upper_uVoltPm = uv_Vd_Pm + err_uVoltPm;
 upper_uvPm = 10*(upper_uVoltPm/GP);
@@ -423,7 +423,7 @@ legend('Without motors', 'With motors running')
 grid on
 hold off
 
-%% Combined plots
+% Combined plots
 
 figure;
 blue = [0 0.7 1];
@@ -455,7 +455,7 @@ legend('Dana point with motors running', 'Dana point without motors', 'Phake lak
 grid on
 hold off
 
-%% getting rid of non unique rows
+% getting rid of non unique rows
 
 % combining into a 2d array of [depth lower upper]
 
@@ -561,7 +561,13 @@ legend('Without motors', 'With motors running')
 grid on
 hold off
 
-% temp dana point
+%% temp calculations:
 
+Rf = 33000;
+Rn = 10000;
+Rg = 34000;
+Rp = 22000;
 
+errT = @(V) V.*sqrt((0.01.*V.*Rf/Rn).^2 + (0.05.*(Rf/Rn).*(-V+(5*Rp/(Rp+Rg)))).^2 + (0.05.*(Rf/Rn).*(V - 5*Rp/(Rp+Rg))).^2 + (0.05*Rg*5*Rp*(-1-(Rf/Rn))/((Rp+Rg)^2))^2);
 
+err_TDNm = ;
