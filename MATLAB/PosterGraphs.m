@@ -337,6 +337,9 @@ uv_ind_PNm = uv_index(tdown_PNm);
 
 %% poster graphs
 
+blue = [0 0.7 1];
+green = [0 0.5 0.1];
+
 % error calculations
 %% first for UV:
 err_uVoltPm = 0.792089.*((uv_Vd_Pm/GP).^2);
@@ -368,13 +371,13 @@ lower_uvDNm = 10*(lower_uVoltDNm/G);
 % Phake Lake
 
 figure;
-plot(depthd_PNm, uv_ind_PNm)
+plot(depthd_PNm, uv_ind_PNm, 'Color', green, 'LineWidth', 1.5)
 hold on
 % errorbar(depthd_PNm, uv_ind_PNm, err_uvPNm, 'o', 'LineWidth',1.5,'MarkerSize',8) %this looks terrible
 % plot(depthd_PNm, lower_uvPNm, 'm')
 % plot(depthd_PNm, upper_uvPNm, 'm')
 % shade(depthd_PNm, upper_uvPNm, depthd_PNm, lower_uvPNm, 'FillType', [1 2])
-plot(depthd_Pm, uv_ind_Pm)
+plot(depthd_Pm, uv_ind_Pm, '-.', 'Color', green, 'LineWidth', 0.5)
 % plot(depthd_Pm, lower_uvPm, 'm')
 % plot(depthd_Pm, upper_uvPm, 'm')
 % shade(depthd_Pm, upper_uvPm, depthd_Pm, lower_uvPm)
@@ -386,9 +389,9 @@ grid on
 hold off
 
 figure;
-plot(depthd_PNm, temp_Cd_PNm)
+plot(depthd_PNm, temp_Cd_PNm, 'Color', green, 'LineWidth', 1.5)
 hold on
-plot(depthd_Pm, temp_Cd_Pm)
+plot(depthd_Pm, temp_Cd_Pm, '-.', 'Color', green, 'LineWidth', 0.5)
 title('Temperature vs Depth at Phake Lake')
 ylabel('Temperature [degrees C]')
 xlabel('Depth [m]')
@@ -399,12 +402,12 @@ hold off
 % Dana Point
 
 figure;
-plot(depthd_DNm, uv_ind_DNm)
+plot(depthd_DNm, uv_ind_DNm, 'Color', blue, 'LineWidth', 1.5)
 hold on
 % plot(depthd_DNm, lower_uvDNm, 'm')
 % plot(depthd_DNm, upper_uvDNm, 'm')
 % shade(depthd_DNm, upper_uvDNm, depthd_DNm, lower_uvDNm)
-plot(depthd_Dm, uv_ind_Dm)
+plot(depthd_Dm, uv_ind_Dm, '-.', 'Color', blue, 'LineWidth', 0.5)
 title('UV vs Depth at Dana Point')
 ylabel('UV index')
 xlabel('Depth [m]')
@@ -413,9 +416,9 @@ grid on
 hold off
 
 figure;
-plot(depthd_DNm, temp_Cd_DNm)
+plot(depthd_DNm, temp_Cd_DNm, 'Color', blue, 'LineWidth', 1.5)
 hold on
-plot(depthd_Dm, temp_Cd_Dm)
+plot(depthd_Dm, temp_Cd_Dm, '-.', 'Color', blue, 'LineWidth', 0.5)
 title('Temperature vs Depth at Dana Point')
 ylabel('Temperature [degrees C]')
 xlabel('Depth [m]')
@@ -426,8 +429,6 @@ hold off
 % Combined plots
 
 figure;
-blue = [0 0.7 1];
-green = [0 0.5 0.1];
 plot(depthd_DNm, uv_ind_DNm, 'Color', blue, 'LineWidth', 1.5);
 hold on
 plot(depthd_Dm, uv_ind_Dm, '-.', 'Color', blue, 'LineWidth', 0.5);
@@ -570,4 +571,4 @@ Rp = 22000;
 
 errT = @(V) V.*sqrt((0.01.*V.*Rf/Rn).^2 + (0.05.*(Rf/Rn).*(-V+(5*Rp/(Rp+Rg)))).^2 + (0.05.*(Rf/Rn).*(V - 5*Rp/(Rp+Rg))).^2 + (0.05*Rg*5*Rp*(-1-(Rf/Rn))/((Rp+Rg)^2))^2);
 
-err_TDNm = ;
+%err_TDNm = ;
